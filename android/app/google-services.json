@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "271080837210",
+    "project_id": "food-calorie-estimation",
+    "storage_bucket": "food-calorie-estimation.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:271080837210:android:f07f17a7ed1cf8a92d8863",
+        "android_client_info": {
+          "package_name": "com.example.food_calorie_estimation"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "271080837210-v22eh6p8k2tr5rb98kolk6c6eutv4bk9.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAX_03pqTweNrkd6JfPlasGW-g8Tb5tre8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "271080837210-v22eh6p8k2tr5rb98kolk6c6eutv4bk9.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

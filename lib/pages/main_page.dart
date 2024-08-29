@@ -1,29 +1,34 @@
 import 'package:flutter/material.dart';
-import 'package:food_calorie_estimation/auth_service.dart';
-import 'package:food_calorie_estimation/pages/estimate_page.dart';
-import 'package:food_calorie_estimation/pages/home_page.dart';
-import 'package:food_calorie_estimation/pages/login_page.dart';
-import 'package:food_calorie_estimation/pages/profile_page.dart';
+import 'home_page.dart';
+import 'estimate_page.dart';
+import 'profile_page.dart';
+
+void main() {
+  runApp(MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Food Estimator',
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+      ),
+      home: MainPage(),
+    );
+  }
+}
 
 class MainPage extends StatefulWidget {
   @override
-  State<MainPage> createState() => _MainPageState();
+  _MainPageState createState() => _MainPageState();
 }
 
 class _MainPageState extends State<MainPage> {
-  final AuthService _authService = AuthService();
-
-  void _logout(BuildContext context) async {
-    await _authService.signOut();
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(builder: (context) => LoginPage()),
-    );
-  }
-
   int _selectedIndex = 0;
 
-  static List<Widget> _widgetOptions = <Widget>[
+  static List<Widget> _pages = <Widget>[
     HomePage(),
     EstimatePage(),
     ProfilePage(),
@@ -38,16 +43,7 @@ class _MainPageState extends State<MainPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Main Page'),
-        actions: [
-          IconButton(
-            icon: Icon(Icons.logout),
-            onPressed: () => _logout(context),
-          ),
-        ],
-      ),
-      body: _widgetOptions.elementAt(_selectedIndex),
+      body: _pages[_selectedIndex],
       bottomNavigationBar: BottomNavigationBar(
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
@@ -64,6 +60,7 @@ class _MainPageState extends State<MainPage> {
           ),
         ],
         currentIndex: _selectedIndex,
+        selectedItemColor: Colors.blue,
         onTap: _onItemTapped,
       ),
     );

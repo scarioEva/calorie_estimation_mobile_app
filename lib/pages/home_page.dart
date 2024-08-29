@@ -1,23 +1,20 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:intl/intl.dart';
 
 class HomePage extends StatelessWidget {
+  final CollectionReference _estimates =
+      FirebaseFirestore.instance.collection('estimates');
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Food Estimates'),
+        title: Text('Home Page'),
       ),
-      body: StreamBuilder<QuerySnapshot>(
-        stream: FirebaseFirestore.instance
-            .collection('users')
-            .doc(FirebaseAuth.instance.currentUser?.uid)
-            .collection('estimates')
-            .orderBy('timestamp', descending: true)
-            .snapshots(),
-        builder: (context, snapshot) {
+      body: StreamBuilder(
+        stream: _estimates.snapshots(),
+        builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
           if (!snapshot.hasData) {
             return Center(child: CircularProgressIndicator());
           }
@@ -29,70 +26,26 @@ class HomePage extends StatelessWidget {
           return ListView.builder(
             itemCount: snapshot.data!.docs.length,
             itemBuilder: (context, index) {
-              var document = snapshot.data!.docs[index];
-              var foodName = document['name'] ?? 'Unknown';
-              var foodImageUrl = document['image_url'];
-              var timestamp = document['timestamp'] as Timestamp;
-              var formattedDate =
-                  DateFormat.yMMMd().add_jm().format(timestamp.toDate());
+              var doc = snapshot.data!.docs[index];
+              var data = doc.data() as Map<String, dynamic>;
 
-              return GestureDetector(
-                onTap: () {
-                  _showFoodDetailsDialog(
-                      context, foodName, document['details'], foodImageUrl);
-                },
-                child: Card(
-                  margin: EdgeInsets.all(10.0),
-                  child: Padding(
-                    padding: EdgeInsets.all(8.0),
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        // Rounded Food Image
-                        if (foodImageUrl != null)
-                          ClipRRect(
-                            borderRadius: BorderRadius.circular(10.0),
-                            child: Image.network(
-                              foodImageUrl,
-                              height: 100.0,
-                              width: 100.0,
-                              fit: BoxFit.cover,
-                            ),
-                          )
-                        else
-                          Container(
-                            height: 100.0,
-                            width: 100.0,
-                            color: Colors.grey[300],
-                            child: Icon(
-                              Icons.fastfood,
-                              color: Colors.grey[700],
-                              size: 50.0,
-                            ),
-                          ),
-                        SizedBox(width: 16.0),
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                foodName,
-                                style: TextStyle(
-                                  fontSize: 20.0,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                              SizedBox(height: 8.0),
-                              Text(
-                                'Created on: $formattedDate',
-                                style: TextStyle(color: Colors.grey[600]),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
+              return Card(
+                child: ListTile(
+                  leading: ClipRRect(
+                    borderRadius: BorderRadius.circular(8.0),
+                    child: Image.network(
+                      data['image_url'],
+                      height: 50,
+                      width: 50,
+                      fit: BoxFit.cover,
                     ),
                   ),
+                  title: Text(data['name']),
+                  subtitle: Text(
+                      'Created on: ${DateFormat('dd/MM/yyyy').format(data['timestamp'].toDate())}'),
+                  onTap: () {
+                    _showFoodDetailsDialog(context, data);
+                  },
                 ),
               );
             },
@@ -102,9 +55,9 @@ class HomePage extends StatelessWidget {
     );
   }
 
-  void _showFoodDetailsDialog(BuildContext context, String foodName,
-      Map<String, dynamic> foodDetails, String foodImageUrl) {
-    showDialog<void>(
+  Future<void> _showFoodDetailsDialog(
+      BuildContext context, Map<String, dynamic> data) {
+    return showDialog<void>(
       context: context,
       barrierDismissible: false,
       builder: (BuildContext context) {
@@ -112,7 +65,7 @@ class HomePage extends StatelessWidget {
           title: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(foodName),
+              Text(data['name']),
               IconButton(
                 icon: Icon(Icons.close),
                 onPressed: () {
@@ -123,12 +76,23 @@ class HomePage extends StatelessWidget {
           ),
           content: SingleChildScrollView(
             child: ListBody(
-              children: foodDetails.entries.map((entry) {
+              children: data.entries.map((entry) {
+                if (entry.key == 'name' ||
+                    entry.key == 'image_url' ||
+                    entry.key == 'timestamp') return SizedBox.shrink();
                 return Text(
                     '${entry.key.replaceAll('_', ' ')}: ${entry.value}');
               }).toList(),
             ),
           ),
+          actions: <Widget>[
+            ElevatedButton(
+              child: Text('Close'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
         );
       },
     );

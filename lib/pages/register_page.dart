@@ -33,7 +33,14 @@ class _RegisterPageState extends State<RegisterPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Register')),
+      appBar: AppBar(
+        title: const Text(
+          'Register',
+          style: TextStyle(color: Color(0xFFF3F3F3)),
+        ),
+        backgroundColor: const Color(0xFF188FA7),
+      ),
+      backgroundColor: const Color(0xFFf3eee8),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Form(
@@ -41,6 +48,11 @@ class _RegisterPageState extends State<RegisterPage> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
+              Image.asset(
+                'assets/logo.png',
+                height: 100,
+              ),
+              const SizedBox(height: 32),
               TextFormField(
                 controller: _emailController,
                 decoration: const InputDecoration(
@@ -54,7 +66,7 @@ class _RegisterPageState extends State<RegisterPage> {
                   return null;
                 },
               ),
-              SizedBox(height: 16),
+              const SizedBox(height: 16),
               TextFormField(
                 controller: _passwordController,
                 decoration: const InputDecoration(

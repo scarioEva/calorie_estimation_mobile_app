@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
@@ -159,7 +160,15 @@ class _EstimatePageState extends State<EstimatePage> {
       TaskSnapshot snapshot = await task;
       String downloadUrl = await snapshot.ref.getDownloadURL();
 
-      await FirebaseFirestore.instance.collection('estimates').add({
+      User? user = FirebaseAuth.instance.currentUser;
+      if (user == null) return;
+
+      CollectionReference estimates = FirebaseFirestore.instance
+          .collection('users')
+          .doc(user.uid)
+          .collection('estimates');
+
+      await estimates.add({
         'name': _foodName,
         'image_url': downloadUrl,
         'timestamp': DateTime.now(),
@@ -289,7 +298,7 @@ class _EstimatePageState extends State<EstimatePage> {
   }) {
     return Expanded(
       child: Card(
-        color: Color(0xFFD5D6AA),
+        color: const Color(0xFFD5D6AA),
         child: InkWell(
           onTap: onPressed,
           child: Container(
@@ -300,7 +309,7 @@ class _EstimatePageState extends State<EstimatePage> {
                 Icon(
                   icon,
                   size: 50,
-                  color: Color(0xFF769FB6),
+                  color: const Color(0xFF769FB6),
                 ),
                 const SizedBox(height: 10),
                 Text(

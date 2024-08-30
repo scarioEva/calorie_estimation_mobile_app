@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:intl/intl.dart';
 
 class HomePage extends StatefulWidget {
@@ -9,9 +10,19 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  final CollectionReference _estimates =
-      FirebaseFirestore.instance.collection('estimates');
+  late CollectionReference _estimates;
   String _selectedOrder = 'Created At';
+  late User _currentUser;
+
+  @override
+  void initState() {
+    super.initState();
+    _currentUser = FirebaseAuth.instance.currentUser!;
+    _estimates = FirebaseFirestore.instance
+        .collection('users')
+        .doc(_currentUser.uid)
+        .collection('estimates');
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -61,7 +72,7 @@ class _HomePageState extends State<HomePage> {
               stream: _getOrderedStream(),
               builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
                 if (!snapshot.hasData) {
-                  return Center(child: CircularProgressIndicator());
+                  return const Center(child: CircularProgressIndicator());
                 }
 
                 if (snapshot.data!.docs.isEmpty) {
@@ -228,15 +239,12 @@ class _HomePageState extends State<HomePage> {
       final ref = FirebaseStorage.instance.refFromURL(imageUrl);
       await ref.delete();
 
-      // Show a success message
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Item deleted successfully')),
+        const SnackBar(content: Text('Item deleted successfully')),
       );
 
-      // Close the dialog
       Navigator.of(context).pop();
     } catch (e) {
-      // Show an error message if the delete fails
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Failed to delete item: $e')),
       );

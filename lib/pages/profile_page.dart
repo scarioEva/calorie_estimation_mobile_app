@@ -50,19 +50,16 @@ class ProfilePage extends StatelessWidget {
       ),
       backgroundColor: const Color.fromARGB(87, 226, 219, 190),
       body: Center(
-        // Center the content horizontally and vertically
         child: Padding(
           padding: const EdgeInsets.all(16.0),
           child: Column(
-            // mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
               CircleAvatar(
                 radius: 50,
                 backgroundImage: user.photoURL != null
                     ? NetworkImage(user.photoURL!)
-                    : const AssetImage('assets/default_profile.png')
-                        as ImageProvider,
+                    : const AssetImage('assets/profile.jpg') as ImageProvider,
               ),
               const SizedBox(height: 16),
               Text(

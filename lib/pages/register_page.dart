@@ -25,7 +25,7 @@ class _RegisterPageState extends State<RegisterPage> {
         );
       } else {
         ScaffoldMessenger.of(context)
-            .showSnackBar(SnackBar(content: Text('Registration failed')));
+            .showSnackBar(const SnackBar(content: Text('Registration failed')));
       }
     }
   }
@@ -43,7 +43,7 @@ class _RegisterPageState extends State<RegisterPage> {
             children: [
               TextFormField(
                 controller: _emailController,
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   labelText: 'Email',
                   border: OutlineInputBorder(),
                 ),
@@ -57,7 +57,7 @@ class _RegisterPageState extends State<RegisterPage> {
               SizedBox(height: 16),
               TextFormField(
                 controller: _passwordController,
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   labelText: 'Password',
                   border: OutlineInputBorder(),
                 ),
@@ -69,13 +69,13 @@ class _RegisterPageState extends State<RegisterPage> {
                   return null;
                 },
               ),
-              SizedBox(height: 16),
+              const SizedBox(height: 16),
               ElevatedButton(
                 onPressed: _register,
                 style: ElevatedButton.styleFrom(
                   minimumSize: Size(double.infinity, 50),
                 ),
-                child: Text('Register'),
+                child: const Text('Register'),
               ),
             ],
           ),

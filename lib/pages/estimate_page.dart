@@ -47,7 +47,7 @@ class _EstimatePageState extends State<EstimatePage> {
 
     try {
       var request = http.MultipartRequest(
-          'POST', Uri.parse('http://192.168.4.204:5000/predict'));
+          'POST', Uri.parse('http://192.168.0.139:5000/predict'));
       request.files
           .add(await http.MultipartFile.fromPath('file', _imageFile!.path));
 
@@ -82,7 +82,7 @@ class _EstimatePageState extends State<EstimatePage> {
 
     try {
       var response = await http.post(
-        Uri.parse('http://192.168.4.204:5000/get-food-details'),
+        Uri.parse('http://192.168.0.139:5000/get-food-details'),
         body: jsonEncode({'food_name': newFoodName}),
         headers: {'Content-Type': 'application/json'},
       );
@@ -115,22 +115,22 @@ class _EstimatePageState extends State<EstimatePage> {
       barrierDismissible: false,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Change Food Name'),
+          title: const Text('Change Food Name'),
           content: TextField(
             controller: _newFoodNameController,
-            decoration: InputDecoration(
-              hintText: 'Enter new name',
+            decoration: const InputDecoration(
+              hintText: 'Enter food name',
             ),
           ),
           actions: <Widget>[
             TextButton(
-              child: Text('Cancel'),
+              child: const Text('Cancel'),
               onPressed: () {
                 Navigator.of(context).pop();
               },
             ),
             ElevatedButton(
-              child: Text('Save'),
+              child: const Text('Submit'),
               onPressed: () async {
                 String newFoodName = _newFoodNameController.text;
                 await _updateFoodDetails(newFoodName);
@@ -153,7 +153,7 @@ class _EstimatePageState extends State<EstimatePage> {
     try {
       String fileName = DateTime.now().millisecondsSinceEpoch.toString();
       UploadTask task = FirebaseStorage.instance
-          .ref('uploads/$fileName')
+          .ref('food_images/$fileName')
           .putFile(_imageFile!);
 
       TaskSnapshot snapshot = await task;
@@ -167,7 +167,7 @@ class _EstimatePageState extends State<EstimatePage> {
       });
 
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Upload complete')),
+        const SnackBar(content: Text('Saved successfully!!')),
       );
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -192,7 +192,7 @@ class _EstimatePageState extends State<EstimatePage> {
         ),
         backgroundColor: const Color(0xFF188FA7),
       ),
-      backgroundColor: const Color(0xFFE2DBBE),
+      backgroundColor: const Color.fromARGB(87, 226, 219, 190),
       body: SingleChildScrollView(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -205,15 +205,15 @@ class _EstimatePageState extends State<EstimatePage> {
                   height: 200,
                 ),
               ),
-            SizedBox(height: 16),
+            const SizedBox(height: 16),
             if (_isSubmitting)
-              CircularProgressIndicator()
+              const CircularProgressIndicator()
             else if (_foodDetails != null) ...[
               Text(
                 _foodName ?? 'Unknown Food',
-                style: TextStyle(fontSize: 24, color: Colors.black),
+                style: const TextStyle(fontSize: 24, color: Colors.black),
               ),
-              SizedBox(height: 16),
+              const SizedBox(height: 16),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16.0),
                 child: Table(
@@ -227,7 +227,7 @@ class _EstimatePageState extends State<EstimatePage> {
                           padding: const EdgeInsets.all(8.0),
                           child: Text(
                             entry.key.replaceAll('_', ' ').toUpperCase(),
-                            style: TextStyle(fontWeight: FontWeight.bold),
+                            style: const TextStyle(fontWeight: FontWeight.bold),
                           ),
                         ),
                         Padding(
@@ -239,27 +239,27 @@ class _EstimatePageState extends State<EstimatePage> {
                   }).toList(),
                 ),
               ),
-              SizedBox(height: 16),
+              const SizedBox(height: 16),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   ElevatedButton(
                     onPressed: _showChangeNameDialog,
-                    child: Text('Change Name'),
+                    child: const Text('Change Name'),
                   ),
                   ElevatedButton(
                     onPressed: _uploadToFirebase,
-                    child: Text('Save'),
+                    child: const Text('Save'),
                   ),
                 ],
               ),
             ] else ...[
-              SizedBox(height: 20),
-              Text(
+              const SizedBox(height: 20),
+              const Text(
                 'Please capture or upload a food image.',
                 style: TextStyle(fontSize: 18, color: Colors.black54),
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
@@ -302,10 +302,10 @@ class _EstimatePageState extends State<EstimatePage> {
                   size: 50,
                   color: Color(0xFF769FB6),
                 ),
-                SizedBox(height: 10),
+                const SizedBox(height: 10),
                 Text(
                   label,
-                  style: TextStyle(
+                  style: const TextStyle(
                     color: Colors.black,
                     fontSize: 18,
                   ),

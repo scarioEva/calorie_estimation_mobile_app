@@ -23,7 +23,7 @@ class _HomePageState extends State<HomePage> {
         ),
         backgroundColor: const Color(0xFF188FA7),
       ),
-      backgroundColor: const Color(0xFFE2DBBE),
+      backgroundColor: const Color.fromARGB(87, 226, 219, 190),
       body: Column(
         children: [
           Padding(

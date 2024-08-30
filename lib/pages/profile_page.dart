@@ -17,7 +17,7 @@ class ProfilePage extends StatelessWidget {
           ),
           backgroundColor: Color(0xFF188FA7),
         ),
-        backgroundColor: Color(0xFFE2DBBE),
+        backgroundColor: Color.fromARGB(87, 226, 219, 190),
         body: const Center(
           child: Text(
             'No user logged in',
@@ -48,7 +48,7 @@ class ProfilePage extends StatelessWidget {
           ),
         ],
       ),
-      backgroundColor: const Color(0xFFE2DBBE),
+      backgroundColor: const Color.fromARGB(87, 226, 219, 190),
       body: Center(
         // Center the content horizontally and vertically
         child: Padding(
